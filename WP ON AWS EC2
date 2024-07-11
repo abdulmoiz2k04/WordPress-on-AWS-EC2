@@ -1,0 +1,52 @@
+First of all, launch an EC2 instance on AWS and connect to it via SSH
+Update the package list: sudo apt update
+Install Apache: sudo apt install apache2
+Install MySQL: sudo apt install mysql-server
+Secure MySQL installation: sudo mysql_secure_installation
+Install PHP: sudo apt install php libapache2-mod-php php-mysql
+Restart Apache to apply changes: sudo systemctl restart apache2
+Log in to MySQL: sudo mysql -u root -p (just press enter when asked to enter password)
+Create a database: CREATE DATABASE wordpress;
+Create a user: CREATE USER 'wordpressuser'@'localhost' IDENTIFIED BY 'yourpassword';
+Grant privileges: GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost';
+Flush the privileges: FLUSH PRIVILEGES;
+Exit mysql by writing EXIT; or by pressing Ctrl + D
+
+WordPress Installation Steps are below:
+cd /tmp
+wget https://wordpress.org/latest.tar.gz
+tar -xvzf latest.tar.gz
+sudo cp -r wordpress/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+cd /var/www/html
+sudo rm index.html
+sudo mv wp-config-sample.php wp-config.php
+sudo nano wp-config.php
+--update the database details accordingly
+
+Now head to your browser and complete the installation
+
+Additional Security and Optimization (Optional):
+sudo ufw allow 'Apache Full'
+sudo ufw enable
+
+Connecting your domain:
+--go to the root directory
+--add an A record having name @ pointing towards your public ip of ec2 instance for 1 hour TTL
+sudo nano /etc/apache2/sites-available/000-default.conf
+--add the following three lines above 'ErrorLog ${APACHE_LOG_DIR}/error.log' line
+ServerAdmin webmaster@yourdomain.com
+ServerName yourdomain.com
+ServerAlias www.yourdomain.com
+(note: don't forget to replace yourdomain.com with your domain)
+--save it and exit
+sudo a2ensite 000-default.conf
+sudo systemctl restart apache2
+
+Set up an SSL certificate with Let's Encrypt:
+--go to the root directory
+sudo apt install certbot python3-certbot-apache -y
+sudo certbot --apache 
+(note follow the proccess to setup an ssl)
+
