@@ -48,5 +48,9 @@ Set up an SSL certificate with Let's Encrypt:
 --go to the root directory
 sudo apt install certbot python3-certbot-apache -y
 sudo certbot --apache 
-(note follow the proccess to setup an ssl)
+(note follow the proccess to setup an SSL)
+
+--run the following command to install the PHP dependencies required for the WordPress
+sudo apt install php-curl php-imagick php-mbstring php-zip php-intl
+
 
